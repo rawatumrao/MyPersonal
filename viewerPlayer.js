@@ -135,18 +135,20 @@
 
 						 let playerConfig = {
 						 	playerElementId: 'flvplayer',
+						 	playerVideoElementId: 'playerVdo',
 						 	eventId: `${$.oViewerData.sEventId}`,
 						 	title: `${$.oViewerData.sTitle}`,
-						 	streamPath:conInfo.streamPath
+						 	streamPath: conInfo.streamPath,
+						 	qualityLabelingFunction: $.qualityLabeling
 						 }
 						 that.videoPlayer = window.loadPlayer(playerConfig);
 
 				    	 if ($.oViewerData.isAudio) {
-		        			//that.html5widget.makeAudio("100%","");
+		        			that.videoPlayer.makeAudio();
 							document.getElementById('flvplayer').style.display = 'none';
 		        			$("#viewer_video").removeClass("margin-top-for-theo-viewer");
 		        	     } else {
-		        	    	//that.html5widget.makeVideo("100%","100%","");
+		        	    	that.videoPlayer.makeVideo();
 		        	    	$("#viewer_video").addClass("margin-top-for-theo-viewer");
 		        	     }
 		        		 
@@ -261,27 +263,24 @@
 			    			 $("#player").height("+=30");
 			    			 $.oViewerData.isAudio = true;
 			    	         $.viewerAction.showHeadshot();
-			    			 //that.html5widget.makeAudio("100%","");//TODO: makeAudio/makeVideo bitmovin functions
+			    	         // that.videoPlayer.hideFullscreenToggleButton();
+			    			 that.videoPlayer.makeAudio();
 			    		 } else {
 			    			 $("#player").height("-=30");
 			    			 $.oViewerData.isAudio = false;
 			 	        	 $("#headshot").hide();
-			    			 //that.html5widget.makeVideo("100%","100%","");
-			    			 
+			 	        	 // that.videoPlayer.showFullscreenToggleButton();
+			    			 that.videoPlayer.makeVideo();
 			    		 }
 			    		 
 		        		 if ($.oViewerData.sMode == "prelive" || $.oViewerData.sMode == "live")	{
 			        		 that.videoPlayer.hideSeekBar();
 			        		 that.videoPlayer.hideTime();
+			        		 //that.videoPlayer.showFullscreenToggleButton();
 			        	 } else {
 			        		 that.videoPlayer.showSeekBar();
 			        		 that.videoPlayer.showTime();
-			        	 }
-			        	 
-			        	 if (pathinfo.playertype == "html5_audio")	{
-			        		 that.videoPlayer.hideFullScreenButton();
-			        	 } else {
-			        		 that.videoPlayer.showFullScreenButton();
+			        		 //that.videoPlayer.showFullscreenToggleButton();
 			        	 }
 		    		 }
 		    		 var coninfo = that.getConInfo(pathinfo); 
@@ -294,11 +293,13 @@
 		    			 $.activePlayer.pause();		    			 
 			   			 $.activePlayer.closeHiveSession();
 		    			 delayStreamSwitch = Math.floor(Math.random() * 5000);
-		    			 setTimeout(function() {	        		
-		        			 $.activePlayer.setSource(streamPath);
-		        		 },delayStreamSwitch);
+                        setTimeout(function () {
+                            // that.videoplayer.setSource(streamPath);
+                            $.activePlayer.setSource(streamPath);
+		        		 }, delayStreamSwitch);
 			   		 } else {
-						$.activePlayer.setSource(streamPath);
+                        // that.videoplayer.setSource(streamPath);
+                        $.activePlayer.setSource(streamPath);
 			   		 }
 		    		 
 		    		 //Fixing an edge case where overlay is launched right at start of event
@@ -315,6 +316,7 @@
 		    	 var that = this;
 		    	 var overlay_mediatype = "ondemand";
 				 var ss_posttext = "";
+				 //that.videoPlayer.showFullscreenToggleButton();
 			
 		    	 $.viewerAction.getPlayerPath("html5" + ss_posttext,overlay_mediatype,$.viewerAction.oActiveSecondaryMedia.oMovie.filename,function(pathinfo) {   
 		    		 if($.oMulticast.isRolledBackToBackupUnicast) {
@@ -334,11 +336,13 @@
 		    			 $.activePlayer.pause();		    			 
 			   			 $.activePlayer.closeHiveSession();
 		    			 delayStreamSwitch = Math.floor(Math.random() * 5000);
-		    			 setTimeout(function() {	        		
-		        			 that.videoplayer.setSource(streamPath);
+                        setTimeout(function () {
+                            // that.videoplayer.setSource(streamPath);
+                            $.activePlayer.setSource(streamPath);
 		        		 }, delayStreamSwitch);
 			   		 } else {
-			   			that.videoplayer.setSource(streamPath);
+                        // that.videoplayer.setSource(streamPath);
+                        $.activePlayer.setSource(streamPath);
 			   		 }
 
 		    		 $.activePlayer.setInitJump(true);
@@ -463,12 +467,6 @@
 	         showControls: function() {
 	         	this.videoPlayer.showControls();
 	         },
-	         showFullScreenButton: function() {
-	         	this.videoPlayer.showFullScreenButton();
-	         },
-	         hideFullScreenButton: function() {
-	         	this.videoPlayer.hideFullScreenButton();
-	         },
 	         hideSeekBar: function() {
 	         	this.videoPlayer.hideSeekBar();
 	         },
@@ -486,6 +484,23 @@
 	         },
 	         hidePlaybackToggleButton: function() {
 	         	this.videoPlayer.hidePlaybackToggleButton();
+	         },
+	         hideFullscreenToggleButton: function() {
+	         	this.videoPlayer.hideFullscreenToggleButton();
+	         },
+	         showFullscreenToggleButton: function() {
+	         	this.videoPlayer.showFullscreenToggleButton();
+	         },
+	         isLive: function() {
+	         	return this.videoPlayer.player.isLive();
+	         },
+	         makeAudio: function() {
+				$.oViewerData.isAudio = true;
+	         	this.videoPlayer.makeAudio();
+	         },
+	         makeVideo: function() {
+				$.oViewerData.isAudio = false;
+	         	this.videoPlayer.makeVideo();
 	         },
 	         videoPlayer: null
 	    },
