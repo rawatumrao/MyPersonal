@@ -225,6 +225,7 @@ String sPassThruUrl = Constants.EMPTY;
 String sTpKey = Constants.EMPTY;
 String chatMessageString = Constants.EMPTY;
 boolean displayQA = false;
+boolean displayChaptersTab = false;
 
 String userLocalTZDate = Constants.EMPTY;
 
@@ -329,8 +330,13 @@ try{
     sEventType = myEvent.getProperty(EventProps.contenttype).equals("") ? "live" : myEvent.getProperty(EventProps.contenttype).toLowerCase();
     sMode = myEvent.getStatus(EventStatus.mode).getValue();
     isOD = (sEventType.equals("od") || (sMode.equals("ondemand")));
-    
-    tp_jump = StringTools.n2s(request.getParameter("tp_jump"));	
+
+	// Note: may be able to use TabType.CHAPTERS.displayTabForEvent(), but this will work for now
+	// Chapters tab is only displayed for OnDemand events. The mode is also "ondemand" for simLive events, so need to exclude simLive events.
+	displayChaptersTab = myEvent.isModeOnDemand() && !myEvent.isSimLive() && myEvent.isChaptersEnabled();
+
+	tp_jump = StringTools.n2s(request.getParameter("tp_jump"));
+
     sLanguage = StringTools.n2s(request.getParameter("language"));	
     if(Constants.EMPTY.equals(sLanguage)){
 		sLanguage = myEvent.getDefaultLanguage();
@@ -374,12 +380,19 @@ try{
     }
     
     if(isOD) {
+    	//TODO: remove
+		logger.log(Logger.INFO,"event.jsp", "eventId=" + sEventId + " is OD; myEvent.isSimLive=" + myEvent.isSimLive());
+    
     	//check for simlive
     	if(myEvent.isSimLive()) {
     		lCurrentDate = System.currentTimeMillis();    		 
     		isPreSimlive = myEvent.isPreSimLive();
     		isSimLiveRunning = myEvent.isSimLiveRunning();
     		isSimlive = isPreSimlive || isSimLiveRunning;
+    		
+    	   	//TODO: remove
+    		logger.log(Logger.INFO,"event.jsp", "eventId=" + sEventId + " isSimlive=" + isSimlive + " isPreSimlive=" + isPreSimlive + " isSimLiveRunning=" + isSimLiveRunning);
+   
     		if(isPreSimlive) {
     			sDate = myEvent.getSimliveStartDateDisplay();
     			if(!sDate.equals("")) {
@@ -971,7 +984,7 @@ input.tp-button, button.tp-button {padding:6px 16px}
       	<div id="playermsg" class="player_hide"><div id="playermsg_wrapper"><span id="playermsg_txt"></span><br>
         	<button type="button" class="ui-state-default ui-corner-all tp-button" id="playermsg_ok"><%=StringEscapeUtils.escapeHtml4(hmAllPlayerText.get("close"))%></button></div>
       	</div>
-    	<div id="flvplayer"></div>
+    	<div id="flvplayer"><video id="playerVdo" disablePictureInPicture=true></video></div>
 		<div id="ReactWedge"></div>
     	<div id="playbuttonDiv" style="height:<%=StringTools.n2I(sVideoHeight)-StringTools.n2I(sPlayButtonDivPad)%>px;width:<%=sVideoWidth%>px;position:absolute;display:flex;justify-content:center;align-items:center;left:0px;top:0px;z-index:10;">
        	    <span>
@@ -1059,7 +1072,7 @@ input.tp-button, button.tp-button {padding:6px 16px}
 			  <div id="chat">
 		 		<iframe frameborder="0" scrolling="no" style="width:100%;height:100%" src="chat_tab.jsp?<%=Constants.RQEVENTID%>=<%=iEventId%>&<%=Constants.RQUSERID%>=<%=ui%>&<%=Constants.RQSESSIONID%>=<%=si%>&<%=Constants.RQEMAILADDRESS%>=<%=URLEncoder.encode(ea, "UTF-8")%>&fname=<%=URLEncoder.encode(fname, "UTF-8")%>&lname=<%=URLEncoder.encode(lname, "UTF-8")%>&sh0=<%=sh0%>&sh1=<%=sh1%><%=chatMessageString%>&location=<%=Constants.ChatLocation.VIEWER_LEFT_TAB.id()%>"></iframe>
 			  </div>
-		  <%} else if (Integer.valueOf(tab.getTabType()).equals(Constants.TabType.CHAPTERS.value()) && myEvent.isChaptersEnabled()) {%> 
+		  <%} else if (Integer.valueOf(tab.getTabType()).equals(Constants.TabType.CHAPTERS.value()) && displayChaptersTab) {%> 
 				<h3 class="<%=tab.isOpen() ? "isopen" : Constants.EMPTY%>" id="chaptersheader"><a class="chapters_title" href="#"><%=tab.getTabTitle()%></a></h3>
 				<div id="jumppointdiv"></div>
 		  <%}else if(Integer.valueOf(tab.getTabType()).equals(Constants.TabType.HTML.value())){%>
@@ -1143,7 +1156,7 @@ input.tp-button, button.tp-button {padding:6px 16px}
 	  		   <li class="ui-state-default ui-corner-top" tabid="<%=tab.getTabId()%>" id="<%=tab.getTabId()%>_title"><a class="resources_title" href="#"><%=tab.getTabTitle()%></a></li>
 	  		  <%}else if(Integer.valueOf(tab.getTabType()).equals(Constants.TabType.CHAT.value())) {%> 
 		 	  <li class="ui-state-default ui-corner-top" tabid="<%=tab.getTabId()%>" id="<%=tab.getTabId()%>_title"><a class="chat_title" href="#"><%=tab.getTabTitle()%></a></li>  	
-	  		  <%}else if(Integer.valueOf(tab.getTabType()).equals(Constants.TabType.CHAPTERS.value()) && myEvent.isChaptersEnabled()) {%> 
+	  		  <%}else if(Integer.valueOf(tab.getTabType()).equals(Constants.TabType.CHAPTERS.value()) && displayChaptersTab) {%> 
 		 	  <li class="ui-state-default ui-corner-top" tabid="<%=tab.getTabId()%>" id="<%=tab.getTabId()%>_title"><a class="chapters_title" href="#"><%=tab.getTabTitle()%></a></li>
 	  		  <%}else if(Integer.valueOf(tab.getTabType()).equals(Constants.TabType.HTML.value())){%>
 	  	 	   <li class="ui-state-default ui-corner-top" tabid="<%=tab.getTabId()%>" id="<%=tab.getTabId()%>_title"><a class="html_title" href="#"><%=tab.getTabTitle()%></a></li>
@@ -1214,7 +1227,7 @@ input.tp-button, button.tp-button {padding:6px 16px}
   	       		<div id="<%=tab.getTabId()%>" class="tab_content tab_hide ui-corner-bottom"  <%if(isIOS){%> style="-webkit-overflow-scrolling:touch; overflow:auto;"<%}%>>
   	       			<iframe id="<%=tab.getTabId()%>_content" name="<%=tab.getTabId()%>_content" src="javascript:'';" allowtransparency="true" frameborder="0" scrolling="auto" allowfullscreen webkitallowfullscreen mozallowfullscreen width="100%" height="100%"></iframe>
   	       		</div>
-          <%}else if(Integer.valueOf(tab.getTabType()).equals(Constants.TabType.CHAPTERS.value()) && myEvent.isChaptersEnabled()){%>
+          <%}else if(Integer.valueOf(tab.getTabType()).equals(Constants.TabType.CHAPTERS.value()) && displayChaptersTab){%>
   	       		<div id="<%=tab.getTabId()%>" class="tab_content tab_hide ui-corner-bottom"  <%if(isIOS){%> style="-webkit-overflow-scrolling:touch; overflow:auto;"<%}%>>
  					<div id="jumppointdiv"></div>
   	       		</div>
@@ -1313,10 +1326,10 @@ input.tp-button, button.tp-button {padding:6px 16px}
 	<jsp:param name="piwik_enabled" value="<%=StringTools.n2b(myEvent.getProperty(EventProps.piwik_enabled))%>"/>
 </jsp:include>
 
-<% if (isHiveMulticast) {
-	// Hive loaded in react app.
-%>
-<script> console.log('<%=HiveJWT.getStreamJWT(sEventId)%>'); </script>
+<% if (isHiveMulticast) { %>
+	<script src="https://media-players.hivestreaming.com/plugins/html5/11.2.0/html5.java.hivejs.hive.min.js"></script>
+	<script src="https://media-players.hivestreaming.com/common_libs/html5/bitmovin/hive-module.js"></script>
+	<script> console.log('<!--%=myEvent.getStreamJWT()%-->'); </script>
 <% } %>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bitmovin-player@8/bitmovinplayer.js" crossorigin></script>
 <script type="text/javascript" src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
@@ -1573,9 +1586,9 @@ input.tp-button, button.tp-button {padding:6px 16px}
 		}
 		function doloadViewer(){
 			document.trackerform.submit();
-			console.log(`Ready state: ${document.readyState}`);
+			console.log(`doloadviewer: Ready state: ${document.readyState}`);
 			if (document.readyState === "complete") {
-				loadViewer();
+				loadViewer();  // see viewerLoader.js
 			} else {
 				document.addEventListener("readystatechange", (e) => {
 					console.log(e.target.readyState);
@@ -1589,7 +1602,8 @@ input.tp-button, button.tp-button {padding:6px 16px}
 		var init_jump = "<%=tp_jump%>";
 		if (init_jump!="") {
 			setTimeout(function() {
-				tpjump();//Fast foward into the stream if tp_jump param is passed.
+				console.log(`calling tpjump`);
+				tpjump();//Fast foward into the stream if tp_jump param is passed. See viewerLoader.js
 			},300);
 		}
 		<%}%>
