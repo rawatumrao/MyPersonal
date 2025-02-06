@@ -179,6 +179,10 @@
 				});
 				$("#playbuttonDiv").click(function () {
 					$.activePlayer.play();
+
+					if ($.oViewerData.isIOS && $.oViewerData.playerType == "html5") {
+						$("#playbuttonDiv").hide();
+					}
 				});
 				$("#add_ianumbers").live("click", function () {
 					$("#iaNumbers").css('left', $("#add_ianumbers").outerWidth() + $("#add_ianumbers").offset().left).css('top', $("#add_ianumbers").offset().top).show();
@@ -367,7 +371,13 @@
 				if ($.oViewerData.playerType === "html5_audio" || $('.vjs-toggleaudio-control').attr('title') === "Switch to Video Stream") {
 					$("#flvplayer").show();
 					$('#bitmovinplayer-video-flvplayer').hide()
-					$('#player-settings-button').hide()
+	   	            
+					if($.oViewerData.isOD){
+						$('#player-settings-button').show()
+					}else{
+						$('#player-settings-button').hide()
+					}
+					
 					$('#fullscreen-button').hide()
 					$('#original-control-bar').addClass('show');
 					$('#bmpui-id-38').css({ 'background-color': 'black', 'opacity': '1' });
@@ -375,7 +385,7 @@
 					$('#original-control-bar').removeClass('show')
 				} else {
 					$('#player-settings-button').show()
-					$('#fullscreen-button').hide()
+					$.activePlayer.hideFullscreenToggleButton();
 					$('#bmpui-id-38').css({ 'background-color': '', 'opacity': '' });
 				}
 
@@ -411,18 +421,9 @@
 				if (statustxt == "Stopped") {
 					statustxt = $.oViewerText.sts_stopped;
 				}
-				if ($.oViewerData.playerType === "html5_audio") {
-					$.activePlayer.hideFullScreenButton();
-				}
-				if ($.oViewerData.playerType === "html5") {
-					$.activePlayer.showFullScreenButton();
-				}
 				if ($.oViewerData.sMode == "live") {
 					$.activePlayer.hidePlaybackSpeed();
 					$.activePlayer.hidePlaybackToggleButton();
-				}
-				if ($.oViewerData.sMode == "simlive") {
-					$.activePlayer.hidePlaybackSpeed();
 				}
 
 				if ($.oViewerData.sMode == "prelive") {
@@ -430,37 +431,65 @@
 					$.activePlayer.hideSeekBar()
 					$.activePlayer.hidePlaybackToggleButton();
 					//$('#bmpui-id-22').show()
+					if($.oViewerData.isOD){
+						$('.bmpui-ui-playbacktimelabel').show();
+					}else{
+						$('.bmpui-ui-playbacktimelabel').hide();
+					}
 					if ($.oViewerData.sPrelive_player_layout == "LAYOUT_SLIDE_ONLY") {
 						//$("#bitmovinplayer-video-flvplayer").hide()
 						$('.bitmovinplayer-container').css('min-height', 'unset');
 						$.activePlayer.hideSeekBar()
 						$("#bmpui-id-21").hide()
+					}
+					if ($.oViewerData.playerType !== "html5_audio"){
+					 	$.activePlayer.showFullscreenToggleButton();
+					}else{
+					 	$.activePlayer.hideFullscreenToggleButton();
 					}
 				} else if ($.oViewerData.sMode == "live") {
 					$.activePlayer.hidePlaybackSpeed()
 					$.activePlayer.hideSeekBar()
 					$.activePlayer.showTime()
+					if ($.oViewerData.playerType !== "html5_audio"){
+					 	$.activePlayer.showFullscreenToggleButton();
+					}else{
+					 	$.activePlayer.hideFullscreenToggleButton();
+					}
 					if ($.viewerAction.oLastLiveAction.layout == "LAYOUT_SLIDE_ONLY") {
 						//$("#bitmovinplayer-video-flvplayer").hide()
 						$('.bitmovinplayer-container').css('min-height', 'unset');
 						$.activePlayer.hideSeekBar()
 						$("#bmpui-id-21").hide()
+						$.activePlayer.hideFullscreenToggleButton();
 					}
 					if ($.viewerAction.oLastLiveAction.layout == "LAYOUT_SLIDE_ONLY" && $.oViewerData.sPrelive_player_layout == "LAYOUT_SLIDE_ONLY") {
-						if($.viewerAction.playerLoadingCount<=2){
 							$("#bitmovinplayer-video-flvplayer").hide()
-							
-						}
+							$.activePlayer.hideFullscreenToggleButton();
 					}
 
 				} else if ($.oViewerData.sMode == "ondemand") {
+					if ($.oViewerData.playerType !== "html5_audio"){
+					 		$.activePlayer.showFullscreenToggleButton();
+					}else{
+					 	$.activePlayer.hideFullscreenToggleButton();
+					}
 					if ($.oViewerData.sPrelive_player_layout == "LAYOUT_SLIDE_ONLY") {
 							//$("#bitmovinplayer-video-flvplayer").hide()
 							$('.bitmovinplayer-container').css('min-height', 'unset');
 							$("#bmpui-id-21").hide()
+							$.activePlayer.hideFullscreenToggleButton();
 					}
+
+					if(!$.oViewerData.isSimlive){
+						$('.bmpui-ui-playbacktimelabel').show();
+					}else{
+						$('.bmpui-ui-playbacktimelabel').hide();
+					}
+
 					if ($.oViewerData.disable_od_seek) {
 						$.activePlayer.hideSeekBar()
+						$.activePlayer.hidePlaybackSpeed()
 						$.activePlayer.hideTime()
 					} else {
 						$.activePlayer.showSeekBar()
