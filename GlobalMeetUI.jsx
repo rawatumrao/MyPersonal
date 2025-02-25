@@ -1,31 +1,26 @@
 // src/components/GlobalMeetUI.jsx
 import React, { useEffect } from 'react';
-import 'bitmovin-player/bitmovinplayer-ui.css';
-import { UIManager, UIFactory } from 'bitmovin-player-ui';
+import { Player } from 'bitmovin-player';
 
 function GlobalMeetUI() {
     useEffect(() => {
-        const player = new bitmovin.player.Player(document.getElementById('player-container'), {
-            key: 'YOUR_BITMOVIN_LICENSE_KEY',
-            playback: {
-                autoplay: true
-            },
+        const playerConfig = {
+            key: 'YOUR_PLAYER_KEY',
             source: {
-                dash: 'YOUR_MANIFEST_URL.mpd'
+                dash: 'https://path/to/your/dash/manifest.mpd',
+                poster: 'https://path/to/your/poster.jpg'
             }
+        };
+
+        const player = new Player(document.getElementById('player-container'), playerConfig);
+
+        player.on('ready', () => {
+            console.log('Bitmovin Player is ready');
         });
 
-        // Clear existing UI if any
-        UIManager.clearUi(player);
-
-        // Create default UI
-        UIFactory.buildDefaultUI(player);
-        
     }, []);
 
-    return (
-        <div id="player-container" className="bitmovin-player"></div>
-    );
+    return <div id="player-container" style={{ width: '100%', height: '500px' }}></div>;
 }
 
 export default GlobalMeetUI;
