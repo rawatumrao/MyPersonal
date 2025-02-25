@@ -1,4 +1,6 @@
-error during build:
-[vite:load-fallback] Could not load bitmovin-player/modules/bitmovinplayer/bitmovinplayer-ui.css (imported by src/components/GlobalMeetUi.jsx): ENOENT: no 
-such file or directory, open 'E:\USR\globalmeet-ui\bitmovin-player\modules\bitmovinplayer\bitmovinplayer-ui.css'
-Error: Could not load bitmovin-player/modules/bitmovinplayer/bitmovinplayer-ui.css (imported by src/components/GlobalMeetUi.jsx): ENOENT: no such file or directory, open 'E:\USR\globalmeet-ui\bitmovin-player\modules\bitmovinplayer\bitmovinplayer-ui.css'
+Failed to load module script: Expected a JavaScript module script but the server responded with a MIME type of "text/css". Strict MIME type checking is enforced for module scripts per HTML spec.
+[NEW] Explain Console errors by using Copilot in Edge: click
+         
+         to explain an error. 
+        Learn more
+        Don't show again
