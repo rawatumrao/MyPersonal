@@ -1,24 +1,29 @@
+// vite.config.js
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import babel from '@rollup/plugin-babel';
 
 export default defineConfig({
-    plugins: [react()],
+    plugins: [
+        react(),
+        babel({
+            babelHelpers: 'bundled',
+            extensions: ['.js', '.jsx'],
+            exclude: 'node_modules/**',
+        })
+    ],
     build: {
         outDir: 'dist',
         rollupOptions: {
-            input: './index.html',
             output: {
                 entryFileNames: 'index.js',
                 assetFileNames: 'assets/[name].[ext]',
-            },
-            plugins: [
-                babel({
-                    babelHelpers: 'bundled',
-                    extensions: ['.js', '.jsx'],
-                    exclude: 'node_modules/**',
-                }),
-            ],
-        },
+            }
+        }
     },
+    resolve: {
+        alias: {
+            'bitmovin-player': 'bitmovin-player/modules/bitmovinplayer'
+        }
+    }
 });
