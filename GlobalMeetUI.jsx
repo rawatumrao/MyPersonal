@@ -1,32 +1,31 @@
 // src/components/GlobalMeetUI.jsx
 import React, { useEffect } from 'react';
 import 'bitmovin-player/bitmovinplayer-ui.css';
-import { UIContainer, PlaybackToggleButton, ControlBar } from 'bitmovin-player-ui';
+import { UIManager, UIFactory } from 'bitmovin-player-ui';
 
 function GlobalMeetUI() {
     useEffect(() => {
-        const defaultUiConfig = new UIContainer({
-            components: [
-                new PlaybackToggleButton({
-                    id: 'playback-toggle-button',
-                    cssClasses: ['tagging-test-class', 'globalmeet-custom-class']
-                }),
-                new ControlBar({
-                    components: [],
-                    id: 'control-bar-container',
-                    cssClasses: ['controlbar-bottom']
-                })
-            ],
-            cssClasses: ['ui-skin-modern']
+        const player = new bitmovin.player.Player(document.getElementById('player-container'), {
+            key: 'YOUR_BITMOVIN_LICENSE_KEY',
+            playback: {
+                autoplay: true
+            },
+            source: {
+                dash: 'YOUR_MANIFEST_URL.mpd'
+            }
         });
 
-        // Attach to an existing DOM element
-        const uiContainerElement = document.getElementById('bitmovin-player-ui');
-        defaultUiConfig.attachToElement(uiContainerElement);
+        // Clear existing UI if any
+        UIManager.clearUi(player);
 
+        // Create default UI
+        UIFactory.buildDefaultUI(player);
+        
     }, []);
 
-    return <div id="bitmovin-player-ui" className="bitmovin-player-ui"></div>;
+    return (
+        <div id="player-container" className="bitmovin-player"></div>
+    );
 }
 
 export default GlobalMeetUI;
