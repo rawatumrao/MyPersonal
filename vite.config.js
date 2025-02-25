@@ -8,6 +8,10 @@ export default defineConfig({
         outDir: 'dist',
         rollupOptions: {
             input: './index.html',
+            output: {
+                entryFileNames: 'index.js',
+                assetFileNames: 'assets/[name].[ext]',
+            },
             plugins: [
                 babel({
                     babelHelpers: 'bundled',
