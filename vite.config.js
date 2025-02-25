@@ -1,30 +1,20 @@
-// vite.config.js
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import babel from '@rollup/plugin-babel';
 
 export default defineConfig({
-    plugins: [
-        react(),
-        babel({
-            babelHelpers: 'bundled',
-            extensions: ['.js', '.jsx'],
-        })
-    ],
+    plugins: [react()],
     build: {
-        lib: {
-            entry: 'src/main.jsx',
-            name: 'GlobalMeetUI',
-            fileName: 'index',
-            formats: ['umd'],
-        },
+        outDir: 'dist',
         rollupOptions: {
-            output: {
-                globals: {
-                    react: 'React',
-                    'react-dom': 'ReactDOM',
-                },
-            },
+            input: './index.html',
+            plugins: [
+                babel({
+                    babelHelpers: 'bundled',
+                    extensions: ['.js', '.jsx'],
+                    exclude: 'node_modules/**',
+                }),
+            ],
         },
     },
 });
