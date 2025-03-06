@@ -4,3 +4,41 @@ Failed to load module script: Expected a JavaScript module script but the server
          to explain an error. 
         Learn more
         Don't show again
+
+
+
+.jumpPointTime {
+    font-size: 12px;
+    color: #666;
+}
+
+
+.jumpPointTitle {
+    white-space: normal; /* Allows text to wrap */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    font-size: 14px;
+}
+
+.jumpPointDetails {
+    display: flex;
+    flex-direction: column; /* Stacks title and time vertically */
+    justify-content: center; /* Centers text within the second column */
+    max-width: 100%; /* Ensures text doesn't overflow */
+    min-width: 0; /* Prevents forcing overflow */
+    overflow: hidden;
+}
+
+.jumpPointWrapper img {
+    width: 80px; /* Fixed width for the image */
+    height: 60px; /* Fixed height to maintain consistency */
+    object-fit: cover; /* Ensures the image is properly fitted */
+}
+
+.jumpPointWrapper {
+    display: grid;
+    grid-template-columns: 80px auto; /* First column for image, second column for text */
+    align-items: center; /* Aligns text and image */
+    gap: 10px; /* Adds spacing between columns */
+    width: 100%; /* Ensures it takes full available width */
+}
