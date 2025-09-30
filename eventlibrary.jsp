@@ -1282,6 +1282,21 @@ $("#folderSearchInput").on("keydown", function(e) {
 			}
 		}, oSettings );
 	}
+	
+	
+	
+	document.addEventListener("DOMContentLoaded", function(){
+		const activeFolder = document.querySelector(".jstree-clicked");
+		if(activeFolder){
+			console.log("Found active folder: ", activeFolder.textContent);
+			settimeout(function(){
+				activeFolder.scrollIntoView({
+					behaviour: "auto",
+					block: "nearest"
+				});
+			}, 100);
+		} else {console.log("No active folder found");}
+	});
 	 	
 </script>
 <%
