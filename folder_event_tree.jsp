@@ -77,22 +77,14 @@ if(sEventId!=null && !"".equalsIgnoreCase(sEventId))
 %>
 </head>
 <body style="background-color:#fff">
-<div>
     <!-- Dynamic Search Box in top-left corner -->
-    <div style="margin-bottom:10px; padding:10px; border-bottom:1px solid #ddd;">
-        <input type="text" id="folderSearchInput" autocomplete="off" placeholder="Search" readonly onfocus="this.removeAttribute('readonly');" 
-               style="width:250px; padding:8px; border:1px solid #ccc; border-radius:4px; font-size:14px;" />
-    </div>
-	<div id ="folderTree"></div>
-	<div class="divRow" style="clear:both; position: fixed; bottom: 0;" >
-		<div class="centerThis">
+    <input type="text" id="folderSearchInput" autocomplete="off" placeholder="Search" readonly onfocus="this.removeAttribute('readonly');"/>
+    
+	<span id ="folderTree" style ="display: block; height: 80vh; overflow-y: auto; border-bottom: 2px solid #ccc; margin: 5px 0px; border-top: 2px solid #ccc;"></span>
+		<div class="divRow centerThis">
 			<a class="buttonSmall" id="cancelFolderSelect" href="#">Cancel</a> &nbsp;
-            <a class="button buttonSave" id="useThisFolder" href="#">Select Events and Folders</a> 
-		
-			
+            <a class="button buttonSave" id="useThisFolder" href="#">Select Events and Folders</a> 			
 		</div>
-	</div>
-</div>
 <div id="reportAlertDialog" title="Alert"  style="display:none; clear:both; overflow:hidden; width:450px!important" >
 	<div class="reportErrorMessageContainer" style="margin: 0 auto;text-align:left;padding:20px;">
             <div class="reportErrorMessageIcon" style="width:90px;float:left;"> <img src="/admin/images/icon_nosign.png" width="50" height="50" /></div>
@@ -133,12 +125,16 @@ if(sEventId!=null && !"".equalsIgnoreCase(sEventId))
     color: inherit;
 }
 
+.footerBar{
+		display: none;
+	}
+
 /* Highlight search results */
-    .jstree-search {
-        font-style: normal !important;
-        color: inherit !important;
-        font-weight: normal !important;
-    }
+.jstree-search {
+    font-style: normal !important;
+    color: inherit !important;
+    font-weight: normal !important;
+}
 
 /* Search input styling */
 #folderSearchInput:focus {
