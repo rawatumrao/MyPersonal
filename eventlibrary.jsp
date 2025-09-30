@@ -377,11 +377,25 @@ a.jstree-clicked > i.jstree-icon.jstree-themeicon.template.jstree-themeicon-cust
           setTimeout(function() {
             const activeNode = document.querySelector('.jstree-clicked');
             if (activeNode) {
+              console.log("Found active folder on ready:", activeNode.textContent);
               const $container = $('#ft');
               const nodeOffset = $(activeNode).offset().top - $container.offset().top + $container.scrollTop();
               $container.animate({ scrollTop: nodeOffset - 20 }, 300); // 20px padding
+            } else {
+              console.log("No active folder found on ready");
             }
           }, 400); // Wait for jsTree to finish rendering
+        }).on('select_node.jstree', function(e, data) {
+          // Also scroll when a node is selected
+          setTimeout(function() {
+            const activeNode = document.querySelector('.jstree-clicked');
+            if (activeNode) {
+              console.log("Found active folder on select:", activeNode.textContent);
+              const $container = $('#ft');
+              const nodeOffset = $(activeNode).offset().top - $container.offset().top + $container.scrollTop();
+              $container.animate({ scrollTop: nodeOffset - 20 }, 300);
+            }
+          }, 100);
         });
 
     	
@@ -1283,20 +1297,6 @@ $("#folderSearchInput").on("keydown", function(e) {
 		}, oSettings );
 	}
 	
-	
-	
-	document.addEventListener("DOMContentLoaded", function(){
-		const activeFolder = document.querySelector(".jstree-clicked");
-		if(activeFolder){
-			console.log("Found active folder: ", activeFolder.textContent);
-			settimeout(function(){
-				activeFolder.scrollIntoView({
-					behaviour: "auto",
-					block: "nearest"
-				});
-			}, 100);
-		} else {console.log("No active folder found");}
-	});
 	 	
 </script>
 <%
