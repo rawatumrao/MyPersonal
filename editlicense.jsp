@@ -454,9 +454,9 @@ try {
 			 $.initdialog();
 			 
 			//programmatically disable autocomplete on form fields
-			$('#pageWrapper').find('input[name], select[name]').prop('autocomplete','new-password');
-			//Specifically override autocomplete for license expires date field expiresOnDateTxt
-			$("input[name='expiresOnDateTxt']").prop('autocomplete','off');
+			$('#pageWrapper').find('input[name], select[name]').not('#totalSimultaneousEventsTxt').prop('autocomplete','new-password');
+			//Keep totalSimultaneousEventsTxt with specific autocomplete setting  
+			$('#totalSimultaneousEventsTxt').prop('autocomplete','off');
 			if (!isCreate) {
 				loadLicenseData();
 			} else {
