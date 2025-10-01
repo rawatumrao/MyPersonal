@@ -271,10 +271,10 @@ boolean hasManageLicensePerm = admin.can(Perms.User.MANAGELICENSES);
 			
 			<div id="totalSimEventsDiv" class="flexbox flexCenter">
 				<span id="totalSimEventsSpn" class="paddingTopBtm2px flexGrow marginRight15px"> Total Simultaneous Events </span>
-				<div style="position: relative; display: inline-block;">
-					<input id="totalSimultaneousEventsTxt_fake" name="fake_field_name" autocomplete="nope" style="position: absolute; left: -9999px; opacity: 0;" type="text" tabindex="-1">
-					<input id="totalSimultaneousEventsTxt" name="sim_events_limit" autocomplete="nope" readonly onfocus="this.removeAttribute('readonly'); this.select();" class="totalSimultaneousEventsTxt marginBtm5px" type="text" data-ruleid="<%=LicenseRule.SIMULTANEOUS_EVENTS%>" data-resourcetypeid="<%=LicenseRule.OVERALL_SIMULTANEOUS_EVENT_LIMIT_KEY%>" spellcheck="false" data-form-type="other">
-				</div>
+				<!-- Isolated form to prevent autocomplete interference -->
+				<form autocomplete="off" style="display: inline; margin: 0; padding: 0;">
+					<input id="totalSimultaneousEventsTxt" autocomplete="off" readonly onfocus="this.removeAttribute('readonly');" class="totalSimultaneousEventsTxt marginBtm5px" type="text" data-ruleid="<%=LicenseRule.SIMULTANEOUS_EVENTS%>" data-resourcetypeid="<%=LicenseRule.OVERALL_SIMULTANEOUS_EVENT_LIMIT_KEY%>" style="margin: 0;">
+				</form>
 			</div>
 			
 		</div>
@@ -319,7 +319,7 @@ boolean hasManageLicensePerm = admin.can(Perms.User.MANAGELICENSES);
 
 	<div id="expiresOnDiv" class="flexbox flexCenter expiresOnDiv">
 		<span id="expiresOnSpn" class="paddingTopBtm2px flexGrow"> Expires On </span>
-		<input id="expiresOnDateTxt" class="expiresOnDateTxt marginBtm5px" name="expiresOnDateTxt" type="text" size="10" readonly value="" autocomplete="off" class="hasDatepick">
+		<input id="expiresOnDateTxt" class="expiresOnDateTxt marginBtm5px" name="license_expiry_date" type="text" size="10" readonly value="" autocomplete="new-password" class="hasDatepick">
 	</div>
 
 	<div class="twoStepVerifyDiv">
@@ -549,108 +549,50 @@ boolean hasManageLicensePerm = admin.can(Perms.User.MANAGELICENSES);
 	$(document).ready(function() {
 		 $.initdialog();
 		 
-		//programmatically disable autocomplete on form fields
+		//programmatically disable autocomplete on form fields (excluding our specific fields)
 		$('#pageWrapper').find('input[name], select[name]').not('#totalSimultaneousEventsTxt, #expiresOnDateTxt').prop('autocomplete','new-password');
-		//Specifically override autocomplete for license expires date field expiresOnDateTxt
-		$("input[name='expiresOnDateTxt']").prop('autocomplete','off');
 		
-		//Ultra-aggressive protection for totalSimultaneousEventsTxt
-		var protectedField = $('#totalSimultaneousEventsTxt');
-		var storedValue = '';
-		var isUserInput = false;
+		//Ultra-protection for totalSimultaneousEventsTxt to prevent any external interference
+		var $protectedField = $('#totalSimultaneousEventsTxt');
+		var protectedValue = '';
+		var userIsEditing = false;
 		
-		protectedField
-			.attr('autocomplete','nope')
-			.prop('autocomplete','nope')
-			.removeAttr('name')
-			.on('input keyup paste', function(e) {
-				isUserInput = true;
-				storedValue = $(this).val();
-				setTimeout(function() { isUserInput = false; }, 100);
-			})
-			.on('focus', function(e) {
-				storedValue = $(this).val();
-				$(this).removeAttr('readonly');
-			})
-			.on('blur', function(e) {
-				storedValue = $(this).val();
-			});
-		
-		// Aggressive value protection with mutation observer
-		var observer = new MutationObserver(function(mutations) {
-			mutations.forEach(function(mutation) {
-				if (mutation.type === 'attributes' && mutation.attributeName === 'value') {
-					var currentVal = protectedField.val();
-					if (!isUserInput && storedValue && currentVal !== storedValue && (currentVal.includes('@') || currentVal.includes('http'))) {
-						protectedField.val(storedValue);
-					}
-				}
-			});
+		// Store value whenever user interacts with it
+		$protectedField.on('input keyup paste', function() {
+			userIsEditing = true;
+			protectedValue = $(this).val();
+			setTimeout(function() { userIsEditing = false; }, 200);
 		});
 		
-		if (protectedField.length > 0) {
-			observer.observe(protectedField[0], { attributes: true, attributeFilter: ['value'] });
-		}
+		// Store value when user focuses/blurs
+		$protectedField.on('focus blur', function() {
+			if (!userIsEditing) {
+				protectedValue = $(this).val();
+			}
+		});
 		
-		// Additional protection via intervals
+		// Protect against any value changes when user is not actively editing
 		setInterval(function() {
-			if (!isUserInput && protectedField.length > 0) {
-				var currentVal = protectedField.val();
-				if (storedValue && currentVal !== storedValue && (currentVal.includes('@') || currentVal.includes('http') || currentVal.toLowerCase().includes('user'))) {
-					protectedField.val(storedValue);
+			if (!userIsEditing && $protectedField.length > 0) {
+				var currentVal = $protectedField.val();
+				if (protectedValue && currentVal !== protectedValue) {
+					// Restore the protected value if it was changed externally
+					$protectedField.val(protectedValue);
 				}
 			}
-		}, 500);
+		}, 100);
+		
+		//Keep totalSimultaneousEventsTxt with specific autocomplete setting
+		$protectedField.prop('autocomplete','off').attr('autocomplete','off');
 		if (<%=hasManageLicensePerm && isEditable%>) { 	
 	    	$('#customizeAcquisitionTypeChx').change(function() {
-	    		// Store the current value before toggling with stronger protection
-	    		var currentSimEventsValue = $('#totalSimultaneousEventsTxt').val();
-	    		isUserInput = true; // Set global flag
-	    		
 	    		licenseLimits.toggleAcquisitionTypeChkBxs(this.checked);
 	    		$('#licenseLimitsBtmContainer .error').each(function(){
 	    			clearErrorMsg($(this));
 	    		});
-	    		
-	    		// Restore the value multiple times to ensure it sticks
-	    		setTimeout(function() {
-	    			if (currentSimEventsValue && $('#totalSimultaneousEventsTxt').val() !== currentSimEventsValue) {
-	    				$('#totalSimultaneousEventsTxt').val(currentSimEventsValue);
-	    				storedValue = currentSimEventsValue;
-	    			}
-	    			isUserInput = false;
-	    		}, 50);
-	    		
-	    		setTimeout(function() {
-	    			if (currentSimEventsValue && $('#totalSimultaneousEventsTxt').val() !== currentSimEventsValue) {
-	    				$('#totalSimultaneousEventsTxt').val(currentSimEventsValue);
-	    				storedValue = currentSimEventsValue;
-	    			}
-	    		}, 200);
 	    	});
 	    	
-	    	$('#expiresOnDateTxt').datepick({
-	    		beforeShow: function() {
-	    			// Store value before date picker opens
-	    			storedValue = $('#totalSimultaneousEventsTxt').val();
-	    		},
-	    		onClose: function() {
-	    			// Restore value after date picker closes
-	    			var currentVal = $('#totalSimultaneousEventsTxt').val();
-	    			if (storedValue && currentVal !== storedValue && (currentVal.includes('@') || currentVal.includes('http'))) {
-	    				$('#totalSimultaneousEventsTxt').val(storedValue);
-	    			}
-	    		},
-	    		onSelect: function() {
-	    			// Additional protection during selection
-	    			setTimeout(function() {
-	    				var currentVal = $('#totalSimultaneousEventsTxt').val();
-	    				if (storedValue && currentVal !== storedValue && (currentVal.includes('@') || currentVal.includes('http'))) {
-	    					$('#totalSimultaneousEventsTxt').val(storedValue);
-	    				}
-	    			}, 10);
-	    		}
-	    	});
+	    	$('#expiresOnDateTxt').datepick();
 		} else {
 			$('#licenseLimitsDiv *').attr('disabled', true);
 			$('#licenseSecurityDiv *').attr('disabled', true);
