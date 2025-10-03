@@ -1,0 +1,63 @@
+Create a complete Spring Boot REST API for a banking application with the following specifications:
+
+**Core Requirements:**
+- Spring Boot 3.x with Java 17
+- JWT-based authentication with role-based access (USER, ADMIN)
+- H2 in-memory database with JPA/Hibernate
+- Swagger/OpenAPI 3 documentation
+- Maven build system
+
+**User Management:**
+- User registration and login with JWT tokens
+- Two roles: USER (default) and ADMIN
+- Password encryption using BCrypt
+- Pre-load admin user (username: admin, password: admin123)
+- Pre-load test user (username: user, password: user123)
+
+**Account Management:**
+- Users can create multiple accounts
+- Account types: SAVINGS and CHECKING
+- Checking account overdraft types:
+  - Type D: $0 overdraft
+  - Type C: $250 overdraft  
+  - Type B: $500 overdraft
+  - Type A: $1000 overdraft
+- Auto-generate unique account numbers
+- Default balance: $0
+
+**Banking Operations:**
+- Deposit money to accounts
+- Withdraw money with overdraft support
+- Transaction history tracking
+- Balance validation before withdrawals
+
+**Admin Features:**
+- View all accounts and transactions
+- Upgrade user account types (checking overdraft levels)
+- Admin-only endpoints with proper security
+
+**Technical Specifications:**
+- JWT secret key configuration
+- Spring Security with stateless sessions
+- JSON serialization without circular references
+- Comprehensive error handling
+- Input validation with proper DTOs
+- Service layer with business logic
+- Repository layer with JPA
+- Controller layer with REST endpoints
+
+**Testing & Documentation:**
+- Unit tests for service layer (80%+ coverage)
+- Swagger UI accessible at /swagger-ui/index.html
+- H2 console enabled for development
+- Proper OpenAPI 3.x specification
+
+**Deliverables:**
+- Complete project structure
+- All source code files
+- Application configuration
+- Test cases
+- README with setup instructions
+- API testing script
+
+Create the entire application with proper package structure, implement all features, and ensure everything works correctly with proper documentation.
