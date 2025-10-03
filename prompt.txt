@@ -1,3 +1,229 @@
+
+I am sharing information below about E-commerce Application. I want to create applicaion using java, spring boot and H2 database. can you share 
+
+
+Create a single Spring Boot REST API with an Employee mode handling frields: id, name, designation, and salary. Provide endpoint  /employees that returns a list of employee records. use an in-memory H2 database with some preloaded records.
+
+
+
+Create a Spring Boot REST API for an E-Commerce backend. The application should include the following:
+
+1. **Entities and Relationships**:
+   - `User` entity with roles: USER, ADMIN, SUPER_ADMIN
+   - `Vendor` entity
+   - `Product` entity linked to Vendor
+   - `Cart` entity for USER to add products
+
+2. **Authentication & Authorization**:
+   - Use **JWT-based authentication**
+   - Create endpoints for user login and registration
+   - Implement role-based access:
+     - USER: Can view products, add to cart
+     - ADMIN: Can also create vendors and products
+     - SUPER_ADMIN: Can additionally update product prices (within ±5%) and view total product count
+
+3. **Product Management APIs**:
+   - Admin-only endpoint to create new products under a vendor
+   - Endpoint to fetch all products with pagination (accessible to all authenticated users)
+   - Endpoint to filter products by price range
+   - Endpoint to get the total count of products (SUPER_ADMIN only)
+
+4. **Database**:
+   - Use an **in-memory H2 database**
+   - Preload with sample users (with roles), vendors, and products via `data.sql` or CommandLineRunner
+
+5. **Validation & Error Handling**:
+   - Proper input validation using `@Valid`
+   - Return meaningful HTTP status codes and error messages
+
+6. **Testing**:
+   - Create **unit test cases** with at least **80% code coverage**
+   - Use `@WebMvcTest`, `@MockBean`, and JUnit 5
+   - Mock security context and service layers where needed
+   - Include test coverage reports
+
+7. **Documentation**:
+   - Integrate **Swagger/OpenAPI** for API documentation
+
+Generate the full project structure with:
+- `pom.xml` for Maven
+- Basic controller, service, repository layers
+- JWT utility and security config classes
+- Role-based access control annotations
+
+
+
+
+Build a Spring Boot REST API for an e-commerce backend using JWT authentication with roles: USER, ADMIN, SUPER_ADMIN. Admins can create products under vendors. All authenticated users can fetch products via a paginated endpoint. SUPER_ADMIN can update prices (±5%) and view product count. Include H2 in-memory DB with preloaded users/products/vendors. Add price filter API. Implement unit test cases with at least 80% coverage and Swagger for documentation.
+
+
+
+=============
+
+
+Create a Spring Boot REST API for a Banking Application with the following features:
+
+1. **Entities and Roles:**
+   - `User`: with roles USER and ADMIN.
+   - `Permissions`: assign permissions to users.
+   - `SavingsAccount`: basic deposit and withdrawal functionality.
+   - `CheckingAccount`: with account types D, C, B, A:
+     - D: no overdraft
+     - C: $250 overdraft
+     - B: $500 overdraft
+     - A: $1000 overdraft
+
+2. **Account Signup & Authentication:**
+   - JWT-based user authentication (signup/login)
+   - Admin user and default permissions must be created at application startup
+   - Users can create Savings and/or Checking accounts
+   - By default, new checking accounts are of type D
+
+3. **Checking Account Overdraft Rules:**
+   - Allow withdrawals beyond current balance using overdraft limit
+   - Reject withdrawals exceeding balance + overdraft
+   - Admins can uplift or downgrade the checking account type (takes effect from next transaction)
+
+4. **API Endpoints:**
+   - Signup and login (with JWT generation)
+   - Create savings/checking accounts
+   - Deposit and withdraw from savings account
+   - Deposit and withdraw from checking account with overdraft logic
+   - Admin-only API to upgrade/downgrade checking account types
+
+5. **Workflow to Test:**
+   - A user signs up and creates a checking account (type D)
+   - Admin upgrades it to type A
+   - User has $100 but is able to withdraw $800 due to $1000 overdraft
+
+6. **Security & Authorization:**
+   - Implement JWT token mechanism
+   - Enforce role-based access:
+     - USER can deposit/withdraw from their own accounts
+     - ADMIN can modify checking account types
+
+7. **Testing Requirements:**
+   - Write JUnit 5 + Mockito test cases with at least 80% code coverage
+   - Cover edge cases (e.g., overdraft boundary, failed withdrawal)
+   - Provide test coverage reports
+   - Ensure test execution without failures
+
+8. **Database & Documentation:**
+   - Use H2 in-memory DB with initial data (admin, permissions)
+   - Add Swagger/OpenAPI documentation for all APIs
+
+Generate the full backend structure including:
+- `pom.xml` for Maven with Spring Boot, Spring Security, JWT, JPA, H2, Swagger, and test dependencies
+- Controllers, Services, Repositories, Security configuration, Entities, DTOs
+- Test classes for major workflows using mocks and assertions
+
+
+
+Build a Spring Boot REST API for a banking app with JWT-based user authentication (roles: USER, ADMIN). Users can create savings and checking accounts (checking types: D=0 overdraft, C=$250, B=$500, A=$1000). Admin can upgrade account types. Support overdraft withdrawals based on account type. Include APIs for account creation, deposit, withdrawal, and type upgrade. Use H2 DB, preload admin user, add Swagger docs, and generate 80% test coverage with JUnit & Mockito.
+
+===========
+==========
+
+
+Create a complete Spring Boot 3.x E-Commerce REST API application with the following specifications:
+
+**Technical Stack:**
+- Spring Boot 3.1.5+ with Java 17
+- Spring Security 6.x with JWT authentication
+- Spring Data JPA with Hibernate
+- H2 in-memory database for development
+- Maven as build tool
+- JUnit 5 for testing
+
+**Security Configuration Requirements:**
+- Use AntPathRequestMatcher.antMatcher() for request matching (Spring Security 6.x compatibility)
+- Support multiple servlets (H2 console + main dispatcher servlet)
+- JWT-based authentication with role-based authorization
+- Roles: USER, ADMIN, SUPER_ADMIN
+- Public endpoints: /api/auth/**, /h2-console/**, /api/products (GET only)
+- Protected endpoints based on roles
+
+**Entity Models:**
+- User (id, username, email, password, role, enabled)
+- Product (id, name, description, price, quantity, category, imageUrl, vendorId, timestamps)
+- Vendor (id, name, email, phone, address, description)
+
+**API Endpoints:**
+- Authentication: POST /api/auth/login, /api/auth/register
+- Products: Full CRUD with role-based access
+- Users: Admin management endpoints
+- Vendors: SUPER_ADMIN management
+
+**Application Configuration:**
+- Use application.properties with H2 configuration
+- Enable H2 console
+- Configure JPA to show SQL queries
+- Set up CORS for frontend integration
+- Configure JWT secret and expiration
+
+**Data Initialization:**
+- Create DataInitializer component
+- Add default users for each role
+- Add sample vendors and products
+- Use @PostConstruct for data loading
+
+**Testing Requirements:**
+- Unit tests for all service layers
+- Integration tests for controllers
+- Security tests for authentication/authorization
+- Repository tests with @DataJpaTest
+
+**Build Configuration:**
+- Include Jacoco for code coverage
+- Configure Maven Surefire plugin
+- Add startup script (run.sh) with Maven/Gradle detection
+
+**Error Handling:**
+- Global exception handler
+- Custom exceptions for business logic
+- Proper HTTP status codes
+- Validation with Bean Validation
+
+**Documentation:**
+- README.md with setup instructions
+- API testing guide with sample requests
+- Project structure documentation
+
+**Important Implementation Notes:**
+1. Use AntPathRequestMatcher instead of generic requestMatchers() for Spring Security 6.x
+2. Handle multiple servlet contexts properly in security config
+3. Ensure proper JWT filter configuration
+4. Use @Transactional appropriately
+5. Implement proper password encoding
+6. Configure CORS for development
+7. Add proper logging configuration
+8. Handle database connection pooling
+9. Implement proper exception handling
+10. Use DTOs for API responses
+
+**Expected Project Structure:**
+
+===========
+
+
+
+**Startup Requirements:**
+- Application should start without errors on port 8080
+- All endpoints should be accessible according to security rules
+- H2 console should be available at /h2-console
+- Default data should be loaded automatically
+- JWT authentication should work properly
+
+Please ensure the application follows Spring Boot best practices and is production-ready with proper error handling, logging, and security measures.
+
+
+
+
+
+
+
+===============
+
 Create a complete Spring Boot REST API for a banking application with the following specifications:
 
 **Core Requirements:**
