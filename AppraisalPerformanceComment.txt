@@ -1,0 +1,59 @@
+ COMPANY OKRSWeightage : 40%
+OBJ 1. AiDE Fluency
+Key Performance Indicator (KPI)
+•      Implement at least 1 AiDE related initiative/pilot in your team, project and at organization level *Per quarter
+•      One instance where you have received client appreciation on utilizing AiDE Agents *Per quarter
+•      Complete the mandatory ACE workshop during the current performance cycle. Obtain AiDE certification by December 2025
+
+Mid-year Appraisee Comment *
+
+
+OBJ 2. Upholding the Stack
+•      Deliver 1 innovation idea that gets approved by the client for a POV/implementation *Per quarter
+•      1 instance where you go above and beyond for a colleague *Per month
+•      1 instance where you go above and beyond for your client *Per month
+
+OBJ 3. Employees in 'Flow’
+•      Define and achieve 2 stretch goals signed off by your manager focusing on both technical and soft skills development *Per quarter
+•      Ensure you adhere to the mandatory training compliance and upskilling *Per quarter
+
+
+ ROLE OKRSWeightage : 30%
+OBJ 1. Productivity
+•      Zero escalations
+•      On-time delivery of the committed user stories or tasks
+•      Improve at least 5% productivity quarter by quarter
+
+OBJ 2. Quality
+•      >85% of unit test coverage
+•      Clean code with 100% adherence to coding standards
+•      No defect leakage (P1/P2) from the code delivered
+
+ PROJECT OKRSWeightage : 30%
+OBJ 1. Optimal Delivery
+a. < 2 instances (per month)  escalations (individual) due to not delivering quality work. 
+b. >2 instances (per month) acknowledgement / appreciation received from Client POC for work delivered. 
+c. Ensure on time sprint tickets delivery and quality of product delivered
+d. Adherence to Project Methodology (Agile Practice). Ensure100% participation in Sprint and Release Readiness activities
+
+OBJ 2. Job / Functional Knowledge
+a. > 02 New requirements learnt / implemented (per month) at the project / application level. 
+b. > 02 cross functional trainings or knowledge sharing sessions (per month) attended / imparted to the team
+c. Improve team Collaboration and Skill Growth with respect to tech stack and application functional knowledge
+
+OBJ 3. Product quality and robustness
+Ensure 100% Development Coverage for comprehensive validation of the software's functionality and performance
+adhering to best practices and coding standards.
+Ensure 90% of Unit Testing is completed before build delivery
+Attain a code review satisfaction score of over 90% from both peers, reflecting the quality and coherence of the peer review process.
+Release builds and applications in respective environments adhering to defined policies
+
+OBJ 4. Up-skilling
+a. 25 Hrs. of up-skilling effort spent (per quarter) learning new skills strictly inline with project / business needs. 
+b. 01 potential POC / POV / Innovative idea (per month / per quarter) demonstrated by translating the learnings into implementation (at project / program level)
+
+
+ OVERALL COMMENTS
+Overall Appraisee Comments *
+
+
