@@ -135,6 +135,16 @@ I’ve spent over 30 hours this quarter on focused upskilling, including complet
 
 Over the past appraisal cycle, I have demonstrated strong ownership across multiple deliverables—Control Box, Bitmovin React Player, and GlobalMeet migration—ensuring technical excellence, innovation, and timely delivery with zero escalations. I actively adopted AiDE Agents to improve team productivity and client satisfaction. My contributions to innovation, team collaboration, cross-skilling, and product quality reflect my commitment to ValueLabs’ core values and OKRs. I remain focused on continuous learning, mentoring, and driving impactful outcomes in alignment with organizational goals.
 
+========
+In the current performance cycle, I have consistently aligned my contributions with company, role, and project OKRs by delivering technically robust, high-impact solutions across three major products — Control Box, Bitmovin React Player, and the GlobalMeet Webcast Application Migration. I ensured on-time delivery, zero escalations, and clean, scalable codebases while maintaining strong Agile practices and CI/CD adherence.
+
+I have actively leveraged AiDE Agents in development workflows, significantly reducing engineering effort and improving turnaround time for UI components and backend logic. This has been recognized through client appreciations and has elevated our adoption of AI-powered productivity tools across the team. Additionally, I have completed the ACE AiDE workshop and am progressing toward certification.
+
+From a leadership standpoint, I introduced innovative UI/UX enhancements in Bitmovin (like resume playback and transcript sync), led cross-functional training sessions, and mentored team members on full-stack practices spanning Java, ReactJS, Spring Boot, PostgreSQL, Docker/Kubernetes, and AWS Cloud.
+
+Through continuous self-upskilling, I’ve completed 30+ hours of advanced learning aligned with project goals and translated these into successful PoCs (e.g., AI-driven captions and player customization). I’ve consistently exceeded quality benchmarks with >90% unit test coverage, 100% code review satisfaction, and adherence to clean code and performance standards.
+
+My focus remains on technical excellence, team enablement, and customer value creation, while proactively adopting emerging tools and frameworks to deliver solutions that are future-ready and business-aligned.
 
 
 
